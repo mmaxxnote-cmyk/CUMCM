@@ -39,15 +39,15 @@ CUMCM/
 
 | 模块 | 主要解决的问题 | 建模流程中的位置 |
 |---|---|---|
-| `00_Template` | 当前无可用内容 | 预留 |
+| `00_Template` |  | 预留 |
 | `01_Data_Analysis` | 数据质量、量纲、变量关系、数据分布 | 数据理解与预处理 |
-| `02_Prediction` | 趋势外推、回归预测、序列网络 | 模型建立与预测 |
+| `02_Prediction` | 趋势外推、回归预测 | 模型建立与预测 |
 | `03_Optimization` | 资源分配、选择决策、连续或黑箱优化 | 决策优化 |
 | `04_Evaluation` | 指标赋权、方案评分、等级评价 | 综合评价与排序 |
-| `05_Machine_Learning` | 分类、无监督分组、降维 | 数据驱动建模 |
+| `05_Machine_Learning` | 分类、无监督分组、降维聚类 | 数据驱动建模 |
 | `06_Numerical_Methods` | 连续系统、函数近似、频域和数值计算 | 机理建模与数值求解 |
 | `07_Modeling_Tools` | 误差计算、模型横向比较、稳健性与绘图 | 模型验证和结果表达 |
-| `08_Competition` | 当前无可用内容 | 预留 |
+| `08_Competition` |  | 预留 |
 
 ---
 
@@ -57,39 +57,40 @@ CUMCM/
 
 | 问题类型 | 推荐工具 | 选择提示 |
 |---|---|---|
-| 缺失值、重复值、描述统计 | `data_clean.py` | 仅内置数值列的均值/中位数填充 |
-| CSV、Excel 等文件读取 | 暂无 | `data_read.py` 当前并未实现读取功能 |
-| 消除量纲影响 | `normalization.py` | Min-Max、Z-score 或评价指标正负向归一化 |
-| 变量线性/单调关系 | `correlation.py` | Pearson 看线性关系，Spearman 看秩单调关系 |
+| 缺失值、重复值、描述统计 | `01_data_clean.py` | 仅内置数值列的均值/中位数填充 |
+| CSV、Excel 等文件读取 | 暂无 | `01_data_read.py` 当前并未实现读取功能 |
+| 消除量纲影响 | `01_normalization.py` | Min-Max、Z-score 或评价指标正负向归一化 |
+| 变量线性/单调关系 | `01_correlation.py` | Pearson 看线性关系，Spearman 看秩单调关系 |
 | 分布、异常值和变量关系展示 | `01_Data_Analysis/visualization.py` | 用于快速探索，不自动处理异常值 |
-| 单变量时间趋势预测 | `ARIMA.py` | 适合给定 `(p,d,q)` 的非季节 ARIMA |
-| 少量时间序列的灰色预测 | `GreyPrediction.py` | 当前实现不完整，暂不建议直接用于正式结果 |
-| 线性关系预测 | `LinearRegression.py` | 关系近似线性且需要清晰基线时使用 |
-| 曲线关系预测 | `PolynomialRegression.py` | 已知关系可用低阶多项式近似时使用 |
-| 自定义函数形式拟合 | `CurveFitting.py` | 已有机理函数或经验函数形式时使用 |
-| 表格数据非线性回归 | `RandomForest.py`、`XGBoost.py` | 需自行准备训练/验证集并调参 |
-| 深度序列模型 | `LSTM.py` | 只有网络结构，训练流程需自行编写 |
-| 连续线性资源分配 | `LinearProgramming.py` | 变量非负、约束为 `<=` |
-| 非负整数资源分配 | `IntegerProgramming.py` | 决策变量必须取非负整数 |
-| 选或不选的组合决策 | `ZeroOneProgramming.py` | 决策变量只取 0 或 1 |
-| 光滑非线性约束最小化 | `NonlinearOptimization.py` | 使用 SLSQP，结果可能依赖初值 |
-| 黑箱连续变量最大化 | `GeneticAlgorithm.py`、`SimulatedAnnealing.py` | 当前两种实现均按最大化工作 |
-| 主观指标赋权 | `AHP.py` | 已有专家判断矩阵时使用 |
-| 客观指标赋权 | `EntropyWeight.py` | 指标差异提供权重信息时使用 |
-| 多方案综合排序 | `TOPSIS.py` | 需要指定每项指标的正负方向 |
-| 模糊等级评价 | `FuzzyEvaluation.py` | 已构造权重和隶属度矩阵时使用 |
-| 有标签分类 | `DecisionTree.py`、`SVM.py` | 树模型便于解释；SVM 内置标准化 |
-| 无标签样本分组 | `KMeans.py` | 聚类数需要事先指定 |
-| 高维指标压缩 | `PCA.py` | 返回主成分及解释方差比例 |
-| 动态系统演化 | `DifferentialEquation.py` | 求解常微分方程初值问题 |
-| 离散点补值 | `Interpolation.py` | 支持线性和三次插值 |
-| 周期或主频线索 | `FFT.py` | 返回未经单边幅值修正的完整频谱 |
-| 随机模拟或随机积分 | `MonteCarlo.py` | 适合能用均匀采样表达的问题 |
-| 确定性数值积分 | `NumericalIntegration.py` | 梯形、Simpson 或自适应积分 |
-| 回归预测误差 | `ErrorAnalysis.py` | 计算 MAE、MSE、RMSE、MAPE、R² |
-| 多个模型指标对比 | `ModelComparison.py` | 只汇总已有指标，不负责训练模型 |
-| 参数稳健性 | `SensitivityAnalysis.py` | 当前只支持单因素变化 |
-| 灰色关联分析 | 暂无 | `GreyRelation.py` 当前为空文件 |
+|---|---|---|
+| 单变量时间趋势预测 | `02_ARIMA.py` | 适合给定 `(p,d,q)` 的非季节 ARIMA |
+| 少量时间序列的灰色预测 | `02_GreyPrediction.py` | 当前实现不完整，暂不建议直接用于正式结果 |
+| 线性关系预测 | `02_LinearRegression.py` | 关系近似线性且需要清晰基线时使用 |
+| 曲线关系预测 | `02_PolynomialRegression.py` | 已知关系可用低阶多项式近似时使用 |
+| 表格数据非线性回归 | `02_RandomForest.py`、`02_XGBoost.py` | 需自行准备训练/验证集并调参 |
+| 深度序列模型 | `02_LSTM.py` | 只有网络结构，训练流程需自行编写 |
+| 连续线性资源分配 | `03_LinearProgramming.py` | 变量非负、约束为 `<=` |
+| 非负整数资源分配 | `03_IntegerProgramming.py` | 决策变量必须取非负整数 |
+| 选或不选的组合决策 | `03_ZeroOneProgramming.py` | 决策变量只取 0 或 1 |
+| 光滑非线性约束最小化 | `03_NonlinearOptimization.py` | 使用 SLSQP，结果可能依赖初值 |
+| 黑箱连续变量最大化 | `03_GeneticAlgorithm.py`、`03_SimulatedAnnealing.py` | 当前两种实现均按最大化工作 |
+| 主观指标赋权 | `04_AHP.py` | 已有专家判断矩阵时使用 |
+| 客观指标赋权 | `04_EntropyWeight.py` | 指标差异提供权重信息时使用 |
+| 多方案综合排序 | `04_TOPSIS.py` | 需要指定每项指标的正负方向 |
+| 模糊等级评价 | `04_FuzzyEvaluation.py` | 已构造权重和隶属度矩阵时使用 |
+| 有标签分类 | `05_DecisionTree.py`、`SVM.py` | 树模型便于解释；SVM 内置标准化 |
+| 无标签样本分组 | `05_KMeans.py` | 聚类数需要事先指定 |
+| 高维指标压缩 | `05_PCA.py` | 返回主成分及解释方差比例 |
+| 自定义函数形式拟合 | `06_CurveFitting.py` | 已有机理函数或经验函数形式时使用 |
+| 动态系统演化 | `06_DifferentialEquation.py` | 求解常微分方程初值问题 |
+| 离散点补值 | `06_Interpolation.py` | 支持线性和三次插值 |
+| 周期或主频线索 | `06_FFT.py` | 返回未经单边幅值修正的完整频谱 |
+| 随机模拟或随机积分 | `06_MonteCarlo.py` | 适合能用均匀采样表达的问题 |
+| 确定性数值积分 | `06_NumericalIntegration.py` | 梯形、Simpson 或自适应积分 |
+| 回归预测误差 | `07_ErrorAnalysis.py` | 计算 MAE、MSE、RMSE、MAPE、R² |
+| 多个模型指标对比 | `07_ModelComparison.py` | 只汇总已有指标，不负责训练模型 |
+| 参数稳健性 | `07_SensitivityAnalysis.py` | 当前只支持单因素变化 |
+| 灰色关联分析 | 暂无 | `07_GreyRelation.py` 当前为空文件 |
 
 ---
 
