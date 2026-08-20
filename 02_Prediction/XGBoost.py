@@ -62,23 +62,20 @@ class XGBoostModel:
 
 
 
-    def evaluate(self, X, y):
+    def evaluate(self, y_true, y_pred):
 
         """
-        模型评价
+        根据真实值和预测值评价模型。
         """
-
-        y_pred=self.predict(X)
-
 
         mse=mean_squared_error(
-            y,
+            y_true,
             y_pred
         )
 
 
         r2=r2_score(
-            y,
+            y_true,
             y_pred
         )
 

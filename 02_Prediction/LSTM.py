@@ -185,6 +185,14 @@ class LSTMForecaster:
                 window.append(next_value)
         return self._inverse(np.asarray(forecasts))
 
+    def predict(self, steps):
+        """统一预测接口：递推预测未来 steps 期。"""
+        return self.forecast(steps)
+
+    def evaluate(self, y_true, y_pred):
+        """根据真实值和预测值计算回归评价指标。"""
+        return regression_metrics(y_true, y_pred)
+
     def _validate_series(self, series):
         values = np.asarray(series, dtype=float)
         if values.ndim != 1:

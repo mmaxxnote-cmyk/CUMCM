@@ -1,6 +1,7 @@
 import pandas as pd
 
 from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_squared_error, r2_score
 
 
 
@@ -52,6 +53,19 @@ class ARIMAModel:
 
 
         return forecast
+
+
+
+    def evaluate(self, y_true, y_pred):
+
+        """
+        根据真实值和预测值计算评价指标。
+        """
+
+        return {
+            "MSE": mean_squared_error(y_true, y_pred),
+            "R2": r2_score(y_true, y_pred)
+        }
 
 
 

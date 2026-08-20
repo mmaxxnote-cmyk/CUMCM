@@ -62,7 +62,7 @@ class GM11:
         restored = self._restore(len(self.x0) + steps)
         return restored[len(self.x0):]
 
-    def evaluate(self):
+    def evaluate_fitted(self):
         """返回训练区间残差、相对误差和常用评价指标。"""
         self._check_fitted()
         mae = float(np.mean(np.abs(self.residuals_)))
@@ -77,6 +77,21 @@ class GM11:
             "accuracy": self._accuracy_grade(mean_relative_error),
             "level_ratio_passed": self.level_ratio_passed_,
         }
+
+    def evaluate(self, y_true, y_pred):
+        """根据真实值和预测值计算 MSE 和 R²。"""
+        true = np.asarray(y_true, dtype=float).reshape(-1)
+        pred = np.asarray(y_pred, dtype=float).reshape(-1)
+        if true.shape != pred.shape or len(true) == 0:
+            raise ValueError("y_true 与 y_pred 必须是等长非空序列")
+
+        residual = true - pred
+        mse = float(np.mean(residual ** 2))
+        denominator = np.sum((true - np.mean(true)) ** 2)
+        r2 = float("nan") if np.isclose(denominator, 0.0) else float(
+            1 - np.sum(residual ** 2) / denominator
+        )
+        return {"MSE": mse, "R2": r2}
 
     @staticmethod
     def level_ratio_test(data):
